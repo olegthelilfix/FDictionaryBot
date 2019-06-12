@@ -1,5 +1,7 @@
-package dev.olegthelilfix.telegram.dictionary
+package dev.olegthelilfix.telegram.dictionary.managers
 
+import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryClient
+import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWordDescription
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.ApiContext
 import org.telegram.telegrambots.ApiContextInitializer
@@ -10,14 +12,10 @@ import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 
-fun formBotOptions(): DefaultBotOptions
-        = ApiContext.getInstance(DefaultBotOptions::class.java) as DefaultBotOptions
-
 @Service
-final class TelegramNotifier : TelegramLongPollingBot(formBotOptions())
+final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java))
 {
     private val botsApi = TelegramBotsApi()
-
 
     private val botUserName: String = "FDictionaryBot"
     private val token: String = "731797556:AAHgblaizxG4ShR6d1k5cF-Qwb9Lf-eVGUs"
@@ -35,18 +33,21 @@ final class TelegramNotifier : TelegramLongPollingBot(formBotOptions())
     }
 
     override fun onUpdateReceived(update: Update) {
-        val result = urbanDictionaryClient.findWorld(update.message.text)
-
-        val html = "*${update.message.text}*\n" +
-                "*definition:*\n`${clearMessage(result.list[0].definition)}`\n" +
-                "*example:*```${clearMessage(result.list[0].example)}```"
-
-        sendMessage(update, html)
+        sendMessage(update, formMessageText(update, urbanDictionaryBestResult(update.message.text)))
     }
 
     override fun getBotUsername() = botUserName
 
     override fun getBotToken() = token
+
+    private fun urbanDictionaryBestResult(word: String): UrbanDictionaryWordDescription
+            = urbanDictionaryClient.findWorld(word).list[0]
+
+    private fun formMessageText(update: Update, info: UrbanDictionaryWordDescription): String
+            = "*${update.message.text}*\n" +
+              "*definition:*\n`${clearMessage(info.definition)}`\n" +
+              "*example:*```${clearMessage(info.example)}```"
+
 
     private fun clearMessage(message: String)
             = message.replace("[", "")

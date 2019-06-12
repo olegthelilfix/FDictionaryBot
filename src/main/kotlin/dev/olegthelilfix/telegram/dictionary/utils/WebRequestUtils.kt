@@ -1,4 +1,4 @@
-package dev.olegthelilfix.telegram.dictionary
+package dev.olegthelilfix.telegram.dictionary.utils
 
 import com.gargoylesoftware.htmlunit.HttpMethod
 import com.gargoylesoftware.htmlunit.WebClient

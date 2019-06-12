@@ -1,12 +1,12 @@
-package dev.olegthelilfix.telegram.dictionary
+package dev.olegthelilfix.telegram.dictionary.access
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.gargoylesoftware.htmlunit.*
 import com.gargoylesoftware.htmlunit.util.NameValuePair
-
-data class UrbanDictionaryWorldList(var list: List<UrbanDictionaryResult>)
+import dev.olegthelilfix.telegram.dictionary.utils.executeWebRequest
+import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWorldList
 
 class UrbanDictionaryClient {
     private val headers: Map<String, String> = mapOf(Pair("X-RapidAPI-Host", "mashape-community-urban-dictionary.p.rapidapi.com"),
@@ -24,7 +24,7 @@ class UrbanDictionaryClient {
 
 
     private fun createWebRequest(requestParameters: List<NameValuePair>): WebRequest
-            = createWebRequest(url, HttpMethod.GET, headers, requestParameters)
+            = dev.olegthelilfix.telegram.dictionary.utils.createWebRequest(url, HttpMethod.GET, headers, requestParameters)
 
     private fun mapRequestResult(response: WebResponse): UrbanDictionaryWorldList
             = mapper.readValue(response.contentAsString, UrbanDictionaryWorldList::class.java)

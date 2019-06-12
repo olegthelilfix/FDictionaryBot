@@ -50,9 +50,10 @@ final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(De
             = urbanDictionaryClient.findWorld(word).list[0]
 
     private fun formMessageText(update: Update, info: UrbanDictionaryWordDescription): String
-            = "[${update.message.text}](${info.permalink}) [from UrbanDictionary]\n" +
+            = "*${update.message.text}* _from UrbanDictionary_\n" +
               "*definition:*\n`${clearMessage(info.definition)}`\n" +
-              "*example:*```${clearMessage(info.example)}```"
+              "*example:*```${clearMessage(info.example)}```\n" +
+              "[link](${info.permalink}) "
 
 
     private fun clearMessage(message: String)

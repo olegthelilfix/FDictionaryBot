@@ -11,6 +11,7 @@ import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import java.lang.Exception
 
 @Service
 final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java))
@@ -33,7 +34,12 @@ final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(De
     }
 
     override fun onUpdateReceived(update: Update) {
-        sendMessage(update, formMessageText(update, urbanDictionaryBestResult(update.message.text)))
+        try {
+            sendMessage(update, formMessageText(update, urbanDictionaryBestResult(update.message.text)))
+        }
+        catch (e: Exception) {
+            sendMessage(update, "птчк вс очн плх.\n$e")
+        }
     }
 
     override fun getBotUsername() = botUserName
@@ -44,7 +50,7 @@ final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(De
             = urbanDictionaryClient.findWorld(word).list[0]
 
     private fun formMessageText(update: Update, info: UrbanDictionaryWordDescription): String
-            = "*${update.message.text}*\n" +
+            = "*[${update.message.text}](${info.permalink})* [from UrbanDictionary]\n" +
               "*definition:*\n`${clearMessage(info.definition)}`\n" +
               "*example:*```${clearMessage(info.example)}```"
 

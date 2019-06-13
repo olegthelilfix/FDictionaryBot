@@ -112,7 +112,7 @@ final class TelegramBotManger
     private fun clearMessage(message: String)
             = message.replace("[", "")
                      .replace("]", "")
-                     .replace("\n", "")
+
 
     private fun sendMessage(update: Update, text: String)
         = execute<Message, SendMessage>(SendMessage(update.message.chatId, text).setParseMode("Markdown"))

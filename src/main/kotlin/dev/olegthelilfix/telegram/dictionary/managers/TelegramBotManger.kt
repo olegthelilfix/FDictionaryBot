@@ -1,7 +1,9 @@
 package dev.olegthelilfix.telegram.dictionary.managers
 
+import dev.olegthelilfix.telegram.dictionary.TopWordCache
 import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWordDescription
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.ApiContext
 import org.telegram.telegrambots.ApiContextInitializer
@@ -16,6 +18,9 @@ import java.lang.Exception
 @Service
 final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java))
 {
+    @Autowired
+    private lateinit var topWordCache: TopWordCache
+
     private val botsApi = TelegramBotsApi()
 
     private val botUserName: String = "FDictionaryBot"
@@ -35,7 +40,21 @@ final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(De
 
     override fun onUpdateReceived(update: Update) {
         try {
-            sendMessage(update, formMessageText(update, urbanDictionaryBestResult(update.message.text)))
+            val message = update.message.text
+
+            if (isCommand(message)) {
+                val args: List<String> = splitCommand(message)
+
+                if (args[0].equals("/topList", true) && topWordCache.topWords.isNotEmpty()) {
+                    sendMessage(update, formBestWordText(topWordCache.topWords))
+                }
+                else {
+                    sendMessage(update, "моя твоя не понимай. писать по руски тогда я понимай.")
+                }
+            }
+            else {
+                sendMessage(update, formWordDescriptionText(message, urbanDictionaryBestResult(update.message.text)))
+            }
         }
         catch (e: Exception) {
             sendMessage(update, "птчк вс очн плх.\n$e")
@@ -46,15 +65,26 @@ final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(De
 
     override fun getBotToken() = token
 
+    private fun splitCommand(message: String) = message.split(" ")
+
+    private fun isCommand(message: String) = message[0] == '/'
+
     private fun urbanDictionaryBestResult(word: String): UrbanDictionaryWordDescription
             = urbanDictionaryClient.findWorld(word).list[0]
 
-    private fun formMessageText(update: Update, info: UrbanDictionaryWordDescription): String
-            = "*${update.message.text}* _from UrbanDictionary_\n" +
+    private fun formWordDescriptionText(message: String, info: UrbanDictionaryWordDescription): String
+            = "*$message* _from UrbanDictionary_\n" +
               "*definition:*\n`${clearMessage(info.definition)}`\n" +
               "*example:*```${clearMessage(info.example)}```\n" +
               "[link](${info.permalink}) "
 
+    private fun formBestWordText(words: List<String>): String {
+        var result = ""
+
+        words.forEachIndexed {index, element -> result += "$index. *$element*\n"}
+
+        return result
+    }
 
     private fun clearMessage(message: String)
             = message.replace("[", "")

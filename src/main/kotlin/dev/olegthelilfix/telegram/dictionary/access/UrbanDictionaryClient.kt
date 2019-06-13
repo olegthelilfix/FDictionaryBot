@@ -7,6 +7,7 @@ import com.gargoylesoftware.htmlunit.*
 import com.gargoylesoftware.htmlunit.util.NameValuePair
 import dev.olegthelilfix.telegram.dictionary.utils.executeWebRequest
 import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWorldList
+import dev.olegthelilfix.telegram.dictionary.utils.createWebRequest
 
 class UrbanDictionaryClient {
     private val headers: Map<String, String> = mapOf(Pair("X-RapidAPI-Host", "mashape-community-urban-dictionary.p.rapidapi.com"),
@@ -19,12 +20,17 @@ class UrbanDictionaryClient {
 
     private val webClient = WebClient()
 
-    fun findWorld(word: String): UrbanDictionaryWorldList
-            = mapRequestResult(webClient.executeWebRequest(createWebRequest(listOf(NameValuePair("term", word)))))
+    fun findWorld(word: String): UrbanDictionaryWorldList {
+        val requestList = listOf(NameValuePair("term", word))
+        val response = webClient.executeWebRequest(createWebRequest(requestList))
 
+        webClient.close()
+
+        return mapRequestResult(response)
+    }
 
     private fun createWebRequest(requestParameters: List<NameValuePair>): WebRequest
-            = dev.olegthelilfix.telegram.dictionary.utils.createWebRequest(url, HttpMethod.GET, headers, requestParameters)
+            = createWebRequest(url, HttpMethod.GET, headers, requestParameters)
 
     private fun mapRequestResult(response: WebResponse): UrbanDictionaryWorldList
             = mapper.readValue(response.contentAsString, UrbanDictionaryWorldList::class.java)

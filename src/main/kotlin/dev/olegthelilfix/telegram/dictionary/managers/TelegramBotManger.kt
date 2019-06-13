@@ -42,7 +42,7 @@ final class TelegramBotManger
             if (isCommand(message)) {
                 val args: List<String> = splitCommand(message)
 
-                if (args[0].equals("/help", true)) {
+                if (args[0].equals("/help", true) || args[0].equals("/start", true)) {
                     sendMessage(update, "Hi bro.\n*/topList* - `список топ слов`\n" +
                             "*/topList N* - `Значение слова из топ списка под номером N (0-29)`\n" +
                             "*/all AnyWord* - `Все доступные значения по указаному слову`\n" +

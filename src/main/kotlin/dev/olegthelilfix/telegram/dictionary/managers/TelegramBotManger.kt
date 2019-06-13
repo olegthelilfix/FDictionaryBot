@@ -46,8 +46,7 @@ final class TelegramBotManger
                     sendMessage(update, "Hi bro.\n*/topList* - `список топ слов`\n" +
                             "*/topList N* - `Значение слова из топ списка под номером N (0-29)`\n" +
                             "*/all AnyWord* - `Все доступные значения по указаному слову`\n" +
-                            "*/best AnyWord* - `Первое значения по указаному слову`\n" +
-                            "*/pain* - `тебе понравится`\n")
+                            "*/best AnyWord* - `Первое значения по указаному слову`")
                 }
                 else if (args[0].equals("/pain", true)) {
                     sendMessage(update, "${update.message.from.firstName} да пошел бы ты нахуй, бич!")

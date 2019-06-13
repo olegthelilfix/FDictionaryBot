@@ -1,6 +1,5 @@
 package dev.olegthelilfix.telegram.dictionary.managers
 
-import dev.olegthelilfix.telegram.dictionary.TopWordCache
 import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWordDescription
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,11 +15,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import java.lang.Exception
 
 @Service
-final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java))
+final class TelegramBotManger
+@Autowired constructor(private var topWordManager: TopWordManager) : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java))
 {
-    @Autowired
-    private lateinit var topWordCache: TopWordCache
-
     private val botsApi = TelegramBotsApi()
 
     private val botUserName: String = "FDictionaryBot"
@@ -45,8 +42,35 @@ final class TelegramBotManger : TelegramLongPollingBot(ApiContext.getInstance(De
             if (isCommand(message)) {
                 val args: List<String> = splitCommand(message)
 
-                if (args[0].equals("/topList", true) && topWordCache.topWords.isNotEmpty()) {
-                    sendMessage(update, formBestWordText(topWordCache.topWords))
+                if (args[0].equals("/help", true)) {
+                    sendMessage(update, "Hi bro.\n*/topList* - `список топ слов`\n" +
+                            "*/topList N* - `Значение слова из топ списка под номером N (0-29)`\n" +
+                            "*/all AnyWord* - `Все доступные значения по указаному слову`\n" +
+                            "*/best AnyWord* - `Первое значения по указаному слову`\n" +
+                            "*/pain* - `тебе понравится`\n")
+                }
+                else if (args[0].equals("/pain", true)) {
+                    sendMessage(update, "${update.message.from.firstName} да пошел бы ты нахуй, бич!")
+                }
+                else if (args[0].equals("/topList", true) && topWordManager.topWords.isNotEmpty()) {
+                    if (args.size > 1) {
+                        val number: Int = args[1].toInt()
+
+                        sendMessage(update, formWordDescriptionText(topWordManager.topWords[number], urbanDictionaryBestResult(topWordManager.topWords[number])))
+                    }
+                    else {
+                        sendMessage(update, formBestWordText(topWordManager.topWords))
+                    }
+                }
+                else if (args[0].equals("/all", true) && args.size > 1) {
+                    val word = args[1]
+
+                    urbanDictionaryClient.findWorld(word).list.forEach { sendMessage(update, formWordDescriptionText(word, it)) }
+                }
+                else if (args[0].equals("/best", true) && args.size > 1) {
+                    val word = args[1]
+
+                    sendMessage(update, formWordDescriptionText(word, urbanDictionaryBestResult(word)))
                 }
                 else {
                     sendMessage(update, "моя твоя не понимай. писать по руски тогда я понимай.")

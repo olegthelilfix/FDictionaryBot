@@ -8,15 +8,16 @@ import com.gargoylesoftware.htmlunit.util.NameValuePair
 import dev.olegthelilfix.telegram.dictionary.utils.executeWebRequest
 import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWorldList
 import dev.olegthelilfix.telegram.dictionary.utils.createWebRequest
+import dev.olegthelilfix.telegram.settings.UrbanDictionarySettings
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
-class UrbanDictionaryClient {
-    private val headers: Map<String, String> = mapOf(Pair("X-RapidAPI-Host", "mashape-community-urban-dictionary.p.rapidapi.com"),
-                                                     Pair("X-RapidAPI-Key", "fea8b134f6msh8d7c8f8fd71001fp19303fjsnb7dc8ebd241d"))
-
-    private val url = "https://mashape-community-urban-dictionary.p.rapidapi.com/define"
-
+@Component
+class UrbanDictionaryClient
+@Autowired
+constructor(var urbanDictionarySettings: UrbanDictionarySettings) {
     private val mapper = ObjectMapper().registerModule(KotlinModule())
-                                       .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
+            .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 
     private val webClient = WebClient()
 
@@ -26,12 +27,16 @@ class UrbanDictionaryClient {
 
         webClient.close()
 
+        webClient.use {
+            it.executeWebRequest(createWebRequest(requestList))
+        }
+
         return mapRequestResult(response)
     }
 
-    private fun createWebRequest(requestParameters: List<NameValuePair>): WebRequest
-            = createWebRequest(url, HttpMethod.GET, headers, requestParameters)
+    private fun createWebRequest(requestParameters: List<NameValuePair>)
+            = createWebRequest(urbanDictionarySettings.url, HttpMethod.GET, urbanDictionarySettings.headers, requestParameters)
 
-    private fun mapRequestResult(response: WebResponse): UrbanDictionaryWorldList
+    private fun mapRequestResult(response: WebResponse)
             = mapper.readValue(response.contentAsString, UrbanDictionaryWorldList::class.java)
 }

@@ -2,6 +2,7 @@ package dev.olegthelilfix.telegram.dictionary.managers
 
 import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWordDescription
+import dev.olegthelilfix.telegram.settings.TelegramBotSettings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.ApiContext
@@ -16,14 +17,11 @@ import java.lang.Exception
 
 @Service
 final class TelegramBotManger
-@Autowired constructor(private var topWordManager: TopWordManager) : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java))
-{
+@Autowired
+constructor(private var topWordManager: TopWordManager,
+            private var telegramBotSettings: TelegramBotSettings,
+            private val urbanDictionaryClient: UrbanDictionaryClient) : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java)) {
     private val botsApi = TelegramBotsApi()
-
-    private val botUserName: String = "FDictionaryBot"
-    private val token: String = "731797556:AAHgblaizxG4ShR6d1k5cF-Qwb9Lf-eVGUs"
-
-    private val urbanDictionaryClient: UrbanDictionaryClient = UrbanDictionaryClient()
 
     companion object {
         init {
@@ -84,9 +82,9 @@ final class TelegramBotManger
         }
     }
 
-    override fun getBotUsername() = botUserName
+    override fun getBotUsername() = telegramBotSettings.botUserName
 
-    override fun getBotToken() = token
+    override fun getBotToken() = telegramBotSettings.token
 
     private fun splitCommand(message: String) = message.split(" ")
 

@@ -11,11 +11,10 @@ import dev.olegthelilfix.telegram.dictionary.utils.createWebRequest
 import dev.olegthelilfix.telegram.settings.UrbanDictionarySettings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
-class UrbanDictionaryClient
-@Autowired
-constructor(var urbanDictionarySettings: UrbanDictionarySettings) {
+//@Service
+class UrbanDictionaryClient constructor(var urbanDictionarySettings: UrbanDictionarySettings) {
     private val mapper = ObjectMapper().registerModule(KotlinModule())
             .configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true)
 

@@ -23,15 +23,10 @@ constructor(var urbanDictionarySettings: UrbanDictionarySettings) {
 
     fun findWorld(word: String): UrbanDictionaryWorldList {
         val requestList = listOf(NameValuePair("term", word))
-        val response = webClient.executeWebRequest(createWebRequest(requestList))
-
-        webClient.close()
 
         webClient.use {
-            it.executeWebRequest(createWebRequest(requestList))
+            return mapRequestResult(it.executeWebRequest(createWebRequest(requestList)))
         }
-
-        return mapRequestResult(response)
     }
 
     private fun createWebRequest(requestParameters: List<NameValuePair>)

@@ -1,8 +1,5 @@
 package dev.olegthelilfix.telegram.dictionary.managers
 
-import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryClient
-import dev.olegthelilfix.telegram.dictionary.operations.Operation
-import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWordDescription
 import dev.olegthelilfix.telegram.settings.TelegramBotSettings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -14,7 +11,6 @@ import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
-import java.lang.Exception
 
 @Service
 final class TelegramBotManger @Autowired constructor(

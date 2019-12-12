@@ -1,7 +1,9 @@
 package dev.olegthelilfix.telegram.dictionary.operations.urban.dictionary
 
 import dev.olegthelilfix.telegram.dictionary.api.client.UrbanDictionaryClient
+import org.springframework.stereotype.Component
 
+@Component
 class AllAboutWordOperation (urbanDictionaryClient: UrbanDictionaryClient): UrbanDictionaryOperation(urbanDictionaryClient) {
     override fun execute(args: List<String>): List<String> {
         if(args.size > 1) {

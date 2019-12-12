@@ -11,9 +11,9 @@ import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 
 @Service
-final class TelegramBotService @Autowired constructor(
-        private var telegramBotSettings: TelegramBotSettings,
-        private val telegramOperationService: TelegramOperationService) : TelegramLongPollingBot() {
+final class TelegramBotService(private val telegramBotSettings: TelegramBotSettings,
+                               private val telegramOperationService: TelegramOperationService) : TelegramLongPollingBot() {
+
     private val botsApi = TelegramBotsApi()
 
     companion object {

@@ -4,11 +4,11 @@ import com.gargoylesoftware.htmlunit.WebClient
 import com.gargoylesoftware.htmlunit.html.HtmlElement
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import dev.olegthelilfix.telegram.dictionary.conf.settings.UrbanDictionarySettings
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class UrbanDictionaryMainPageParser @Autowired constructor(val urbanDictionarySettings: UrbanDictionarySettings) {
+class UrbanDictionaryMainPageParser (val urbanDictionarySettings: UrbanDictionarySettings){
+
     private val webClient = WebClient()
 
     init {

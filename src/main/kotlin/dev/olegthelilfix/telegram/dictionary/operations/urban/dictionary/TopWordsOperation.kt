@@ -2,7 +2,9 @@ package dev.olegthelilfix.telegram.dictionary.operations.urban.dictionary
 
 import dev.olegthelilfix.telegram.dictionary.api.client.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.services.TopWordService
+import org.springframework.stereotype.Component
 
+@Component
 class TopWordsOperation(private val topWordService: TopWordService,
                         urbanDictionaryClient: UrbanDictionaryClient) : UrbanDictionaryOperation(urbanDictionaryClient) {
     override fun execute(args: List<String>): List<String> {

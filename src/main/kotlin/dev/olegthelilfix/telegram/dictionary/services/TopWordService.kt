@@ -7,7 +7,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 @Service
-class TopWordService @Autowired constructor(private val wordParser: UrbanDictionaryMainPageParser) {
+class TopWordService(private val wordParser: UrbanDictionaryMainPageParser) {
     var topWords: List<String> = wordParser.parseTopList()
 
     init {

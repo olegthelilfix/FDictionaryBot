@@ -1,21 +1,19 @@
-package dev.olegthelilfix.telegram.dictionary.managers
+package dev.olegthelilfix.telegram.dictionary.services
 
-import dev.olegthelilfix.telegram.settings.TelegramBotSettings
+import dev.olegthelilfix.telegram.dictionary.conf.settings.TelegramBotSettings
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.telegram.telegrambots.ApiContext
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.TelegramBotsApi
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
-import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 
 @Service
-final class TelegramBotManger @Autowired constructor(
+final class TelegramBotService @Autowired constructor(
         private var telegramBotSettings: TelegramBotSettings,
-        private val telegramOperationService: TelegramOperationService) : TelegramLongPollingBot(ApiContext.getInstance(DefaultBotOptions::class.java)) {
+        private val telegramOperationService: TelegramOperationService) : TelegramLongPollingBot() {
     private val botsApi = TelegramBotsApi()
 
     companion object {
@@ -25,18 +23,15 @@ final class TelegramBotManger @Autowired constructor(
     }
 
     init {
-        botsApi.registerBot(this);
+        botsApi.registerBot(this)
     }
 
     override fun onUpdateReceived(update: Update) {
         try {
-            val message = update.message.text
+            val args: List<String> = splitCommand(update.message.text)
 
-            val args: List<String> = splitCommand(message)
-
-            telegramOperationService.executeOperation(args).forEach {sendMessage(update,it)}
-        }
-        catch (e: Exception) {
+            telegramOperationService.executeOperation(args).forEach { sendMessage(update, it) }
+        } catch (e: Exception) {
             sendMessage(update, "птчк вс очн плх.\n$e")
         }
     }
@@ -47,6 +42,5 @@ final class TelegramBotManger @Autowired constructor(
 
     private fun splitCommand(message: String) = message.split(" ")
 
-    private fun sendMessage(update: Update, text: String)
-        = execute<Message, SendMessage>(SendMessage(update.message.chatId, text).setParseMode("Markdown"))
+    private fun sendMessage(update: Update, text: String) = execute<Message, SendMessage>(SendMessage(update.message.chatId, text).setParseMode("Markdown"))
 }

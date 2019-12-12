@@ -1,6 +1,6 @@
 package dev.olegthelilfix.telegram.dictionary.operations.urban.dictionary
 
-import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryClient
+import dev.olegthelilfix.telegram.dictionary.api.client.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.operations.Operation
 import dev.olegthelilfix.telegram.dictionary.shared.UrbanDictionaryWordDescription
 

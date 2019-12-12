@@ -1,13 +1,13 @@
-package dev.olegthelilfix.telegram.dictionary.managers
+package dev.olegthelilfix.telegram.dictionary.services
 
-import dev.olegthelilfix.telegram.dictionary.access.UrbanDictionaryMainPageParser
+import dev.olegthelilfix.telegram.dictionary.api.client.UrbanDictionaryMainPageParser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 @Service
-class TopWordManager @Autowired constructor(private var wordParser: UrbanDictionaryMainPageParser) {
+class TopWordService @Autowired constructor(private val wordParser: UrbanDictionaryMainPageParser) {
     var topWords: List<String> = wordParser.parseTopList()
 
     init {

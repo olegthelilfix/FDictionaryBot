@@ -1,3 +1,3 @@
-package dev.olegthelilfix.telegram.settings
+package dev.olegthelilfix.telegram.dictionary.conf.settings
 
 class TelegramBotSettings(val botUserName: String, var token: String)

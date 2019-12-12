@@ -1,3 +1,3 @@
 package dev.olegthelilfix.telegram.dictionary.shared
 
-data class UrbanDictionaryWorldList(var list: List<UrbanDictionaryWordDescription>)
+data class UrbanDictionaryWorldList(val list: List<UrbanDictionaryWordDescription>)

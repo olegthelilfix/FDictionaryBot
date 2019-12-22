@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ServiceUserRepository: CrudRepository<ServiceUser, Long> {
-    @Query("SELECT id, telegramId, chatId, firstName, lastName, userName, languageCode FROM ServiceUser WHERE telegramId = :telegramId")
+    @Query("SELECT req FROM ServiceUser as req WHERE req.telegramId = :telegramId")
     fun findByTelegramId(telegramId: Int) : ServiceUser
 
     @Query("SELECT (count(id) > 0) as isExist FROM ServiceUser WHERE telegramId = :telegramId")

@@ -36,14 +36,14 @@ final class TelegramBotService(private val telegramBotSettings: TelegramBotSetti
 
     override fun onUpdateReceived(update: Update) {
         try {
-            if (serviceUserRepository.isUserExist(update.message.from.id)) {
+            if (!serviceUserRepository.isUserExist(update.message.from.id)) {
                 val user = serviceUserRepository.save(ServiceUser(update.message.from, update.message.chatId))
                 logger.info("User create {}", user.toString())
             }
-//            else {
-//                val user = serviceUserRepository.findByTelegramId(update.message.from.id)
-//                logger.info("User found {}", user.toString());
-//            }
+            else {
+                val user = serviceUserRepository.findByTelegramId(update.message.from.id)
+                logger.info("User found {}", user.toString());
+            }
 
             val args: List<String> = splitCommand(update.message.text)
 

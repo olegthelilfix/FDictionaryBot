@@ -6,6 +6,7 @@ import dev.olegthelilfix.telegram.dictionary.repositories.ServiceUserRepository
 import org.apache.log4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.TelegramBotsApi
@@ -35,13 +36,13 @@ final class TelegramBotService(private val telegramBotSettings: TelegramBotSetti
 
     override fun onUpdateReceived(update: Update) {
         try {
-            var user: ServiceUser? = serviceUserRepository.findByTelegramId(update.message.from.id)
-            if (user != null) {
-                user = serviceUserRepository.save(ServiceUser(update.message.from, update.message.chatId))
-                logger.info("User create {}", user?.toString())
+            if (serviceUserRepository.isUserExist(update.message.from.id)) {
+                val user = serviceUserRepository.save(ServiceUser(update.message.from, update.message.chatId))
+                logger.info("User create {}", user.toString())
             }
             else {
-                logger.info("User found {}", user?.toString());
+                val user = serviceUserRepository.findByTelegramId(update.message.from.id)
+                logger.info("User found {}", user.toString());
             }
 
             val args: List<String> = splitCommand(update.message.text)

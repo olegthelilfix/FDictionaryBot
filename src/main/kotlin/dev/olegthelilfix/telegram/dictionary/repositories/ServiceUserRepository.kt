@@ -10,4 +10,7 @@ import java.util.*
 interface ServiceUserRepository: CrudRepository<ServiceUser, Long> {
     @Query("SELECT id, telegramId, chatId, firstName, lastName, userName, languageCode FROM ServiceUser WHERE telegramId = :telegramId")
     fun findByTelegramId(telegramId: Int) : ServiceUser
+
+    @Query("SELECT exists(SELECT * from ServiceUser WHERE telegramId = :telegramId)")
+    fun isUserExist(telegramId: Int): Boolean
 }

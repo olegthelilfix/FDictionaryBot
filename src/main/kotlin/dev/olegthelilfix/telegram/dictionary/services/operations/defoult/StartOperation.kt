@@ -1,6 +1,6 @@
-package dev.olegthelilfix.telegram.dictionary.operations.defoult
+package dev.olegthelilfix.telegram.dictionary.services.operations.defoult
 
-import dev.olegthelilfix.telegram.dictionary.operations.Operation
+import dev.olegthelilfix.telegram.dictionary.services.operations.Operation
 
 class StartOperation (telegramOperation : List<Operation>) : HelpOperation(telegramOperation) {
     override fun getName(): String = "/start"

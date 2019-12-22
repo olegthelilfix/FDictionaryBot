@@ -1,4 +1,4 @@
-package dev.olegthelilfix.telegram.dictionary.operations.urban.dictionary
+package dev.olegthelilfix.telegram.dictionary.services.operations.urban.dictionary
 
 import dev.olegthelilfix.telegram.dictionary.api.client.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.services.TopWordService

@@ -1,6 +1,6 @@
-package dev.olegthelilfix.telegram.dictionary.operations.funny
+package dev.olegthelilfix.telegram.dictionary.services.operations.funny
 
-import dev.olegthelilfix.telegram.dictionary.operations.Operation
+import dev.olegthelilfix.telegram.dictionary.services.operations.Operation
 import org.springframework.stereotype.Component
 
 @Component

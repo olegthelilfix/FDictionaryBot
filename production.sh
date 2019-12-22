@@ -13,3 +13,7 @@ fi
 if [ $1 = "logs" ]; then
     sudo docker logs -f --tail 100 telegram-dictionary
 fi
+
+docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=fuckyou620695 -d postgres
+
+docker run -d --name mongo-telegram -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=fuckyou620695 -e MONGODB_APPLICATION_DATABASE=telegram -e MONGODB_APPLICATION_USER=user -e MONGODB_APPLICATION_PASS=fuckyou620695 mongo

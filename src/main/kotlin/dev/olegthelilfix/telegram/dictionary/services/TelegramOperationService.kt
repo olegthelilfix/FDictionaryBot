@@ -1,7 +1,7 @@
 package dev.olegthelilfix.telegram.dictionary.services
 
-import dev.olegthelilfix.telegram.dictionary.operations.Operation
-import dev.olegthelilfix.telegram.dictionary.operations.defoult.ErrorOperation
+import dev.olegthelilfix.telegram.dictionary.services.operations.Operation
+import dev.olegthelilfix.telegram.dictionary.services.operations.defoult.ErrorOperation
 import java.util.stream.Collectors
 
 class TelegramOperationService(telegramOperation : List<Operation>) {

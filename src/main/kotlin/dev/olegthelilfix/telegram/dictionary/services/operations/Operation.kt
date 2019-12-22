@@ -1,4 +1,4 @@
-package dev.olegthelilfix.telegram.dictionary.operations
+package dev.olegthelilfix.telegram.dictionary.services.operations
 
 interface Operation {
     fun execute(args: List<String>) : List<String>

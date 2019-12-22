@@ -1,6 +1,6 @@
-package dev.olegthelilfix.telegram.dictionary.operations.defoult
+package dev.olegthelilfix.telegram.dictionary.services.operations.defoult
 
-import dev.olegthelilfix.telegram.dictionary.operations.Operation
+import dev.olegthelilfix.telegram.dictionary.services.operations.Operation
 
 class ErrorOperation: Operation {
     override fun execute(args: List<String>)= listOf("моя твоя не понимай. писать по руски тогда я понимай.")

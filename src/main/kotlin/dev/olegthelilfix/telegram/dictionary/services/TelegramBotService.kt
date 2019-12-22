@@ -40,10 +40,10 @@ final class TelegramBotService(private val telegramBotSettings: TelegramBotSetti
                 val user = serviceUserRepository.save(ServiceUser(update.message.from, update.message.chatId))
                 logger.info("User create {}", user.toString())
             }
-            else {
-                val user = serviceUserRepository.findByTelegramId(update.message.from.id)
-                logger.info("User found {}", user.toString());
-            }
+//            else {
+//                val user = serviceUserRepository.findByTelegramId(update.message.from.id)
+//                logger.info("User found {}", user.toString());
+//            }
 
             val args: List<String> = splitCommand(update.message.text)
 

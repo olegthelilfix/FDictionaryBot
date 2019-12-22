@@ -2,14 +2,15 @@ package dev.olegthelilfix.telegram.dictionary.services.operations.urban.dictiona
 
 import dev.olegthelilfix.telegram.dictionary.api.client.UrbanDictionaryClient
 import dev.olegthelilfix.telegram.dictionary.services.TopWordService
+import dev.olegthelilfix.telegram.dictionary.shared.TelegramOperationArguments
 import org.springframework.stereotype.Component
 
 @Component
 class TopWordsOperation(private val topWordService: TopWordService,
                         urbanDictionaryClient: UrbanDictionaryClient) : UrbanDictionaryOperation(urbanDictionaryClient) {
-    override fun execute(args: List<String>): List<String> {
-        return if (args.size > 1) {
-            val number: Int = args[1].toInt()
+    override fun execute(args: TelegramOperationArguments): List<String> {
+        return if (args.list.size > 1) {
+            val number: Int = args.list[1].toInt()
 
             listOf(formWordDescriptionText(topWordService.topWords[number], urbanDictionaryBestResult(topWordService.topWords[number])))
         } else {

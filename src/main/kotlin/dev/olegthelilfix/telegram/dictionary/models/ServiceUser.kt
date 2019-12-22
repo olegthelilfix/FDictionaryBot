@@ -6,9 +6,9 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "ServiceUser")
-public class ServiceUser(): Serializable {
+class ServiceUser(): Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
 
     @Column(name="telegramId")
